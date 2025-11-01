@@ -21,15 +21,18 @@ app.use(express.urlencoded({ extended: true }));
 // Configuración de sesiones
 // En producción (fly.io), las sesiones en memoria se perderán en reinicios
 // Para una solución más robusta, considerar usar Redis, pero para uso simple esto funciona
+const isProduction = process.env.NODE_ENV === 'production' || process.env.FLY_APP_NAME !== undefined;
 app.use(session({
   secret: process.env.SESSION_SECRET || 'lu-finanzas-secret-key-change-in-production',
   resave: false,
   saveUninitialized: false,
+  name: 'lu-finanzas.sid', // Nombre explícito para la cookie
   cookie: { 
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production' || process.env.FLY_APP_NAME !== undefined,
-    sameSite: 'lax',
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 días
+    secure: isProduction, // Solo HTTPS en producción
+    sameSite: 'lax', // 'lax' funciona bien para mismo dominio
+    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 días
+    path: '/' // Asegurar que la cookie se envíe en todas las rutas
   }
 }));
 
@@ -45,9 +48,12 @@ app.get('/login', (req, res) => {
 
 // Proteger index.html - redirigir a login si no está autenticado
 app.get('/', (req, res) => {
+  console.log(`[ROOT] Session ID: ${req.sessionID}, User: ${req.session?.user || 'none'}`);
   if (!req.session || !req.session.user) {
+    console.log('[ROOT] No autenticado, redirigiendo a login');
     res.redirect('/login.html');
   } else {
+    console.log(`[ROOT] Usuario autenticado: ${req.session.user}`);
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
   }
 });
@@ -142,11 +148,33 @@ app.post('/api/auth/login', async (req, res) => {
   const usuarios = leerUsuarios();
   
   if (!usuarios[usuario] || !bcrypt.compareSync(password, usuarios[usuario].password)) {
+    console.log(`[AUTH] Login fallido para usuario: ${usuario}`);
     return res.status(401).json({ success: false, message: 'Credenciales inválidas' });
   }
 
+  // Configurar sesión
   req.session.user = usuario;
-  res.json({ success: true, user: usuario, nombre: usuarios[usuario].nombre });
+  
+  // Guardar la sesión explícitamente antes de responder
+  req.session.save((err) => {
+    if (err) {
+      console.error('[AUTH] Error al guardar sesión:', err);
+      return res.status(500).json({ success: false, message: 'Error al iniciar sesión' });
+    }
+    
+    console.log(`[AUTH] Login exitoso para usuario: ${usuario}, Session ID: ${req.sessionID}`);
+    
+    // Asegurar que la cookie se establezca
+    res.cookie('lu-finanzas.sid', req.sessionID, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      path: '/'
+    });
+    
+    res.json({ success: true, user: usuario, nombre: usuarios[usuario].nombre });
+  });
 });
 
 // Logout
@@ -157,10 +185,11 @@ app.post('/api/auth/logout', (req, res) => {
 
 // Verificar sesión
 app.get('/api/auth/me', (req, res) => {
+  console.log(`[AUTH/ME] Session ID: ${req.sessionID}, User: ${req.session?.user || 'none'}`);
   if (req.session && req.session.user) {
     const usuarios = leerUsuarios();
     const user = usuarios[req.session.user];
-    res.json({ authenticated: true, user: req.session.user, nombre: user.nombre });
+    res.json({ authenticated: true, user: req.session.user, nombre: user?.nombre || req.session.user });
   } else {
     res.json({ authenticated: false });
   }
