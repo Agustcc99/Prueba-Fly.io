@@ -1,0 +1,42 @@
+# Configuración para fly.io
+# Este archivo define cómo se despliega la aplicación en fly.io
+
+app = "lu-finanzas-api"  # Cambia esto por el nombre de tu app en fly.io
+primary_region = "iad"   # Región (iad = Virginia, gru = Sao Paulo, etc.)
+
+[build]
+  # No necesitamos build específico, fly.io detectará automáticamente Node.js
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "3000"
+  DATA_DIR = "/data"
+  # SESSION_SECRET se configura con: fly secrets set SESSION_SECRET=tu_secreto_super_seguro
+
+[[vm]]
+  memory_mb = 256
+  cpu_kind = "shared"
+  cpus = 1
+
+# Volumen persistente para los datos (db.json y users.json)
+# IMPORTANTE: Debes crear el volumen manualmente después del primer despliegue
+# Comando: fly volumes create data --region iad --size 1
+[[mounts]]
+  source = "data"
+  destination = "/data"
+

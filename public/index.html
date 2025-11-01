@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Finanzas de Lu — API</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Finanzas de Lu</h1>
+    <button id="logoutBtn" style="position:absolute;right:24px;top:50%;transform:translateY(-50%);padding:8px 16px;background:#fff;border:1px solid #ddd;border-radius:8px;cursor:pointer">Cerrar Sesión</button>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Nuevo movimiento</h2>
+      <form id="form">
+        <select id="tipo">
+          <option value="ingreso">Ingreso</option>
+          <option value="gasto">Gasto</option>
+        </select>
+        <input id="area" list="areas" placeholder="Área/Origen" />
+        <datalist id="areas"></datalist>
+        <input id="categoria" list="categorias" placeholder="Categoría" />
+        <datalist id="categorias"></datalist>
+        <input id="monto" type="number" step="0.01" min="0" placeholder="Monto" required />
+        <input id="fecha" type="date" required />
+        <button class="btn">Guardar</button>
+      </form>
+      <div class="tips">Sugerencia: cargá áreas/categorías con sentido para vos; se guardan y vuelven a aparecer como sugerencias.</div>
+    </section>
+
+    <section class="panel">
+      <h2>Listado</h2>
+      <div class="filtros">
+        <input id="q" placeholder="Buscar..." />
+        <select id="tipoFiltro">
+          <option value="">Todos</option>
+          <option value="ingreso">Ingresos</option>
+          <option value="gasto">Gastos</option>
+        </select>
+        <input id="mes" type="month" />
+        <div class="chips" role="group" aria-label="Períodos rápidos">
+          <button class="chip" data-period="mes-actual">Mes actual</button>
+          <button class="chip" data-period="mes-anterior">Mes anterior</button>
+          <button class="chip" data-period="anio-actual">Año actual</button>
+          <button class="chip" data-period="todo">Todo</button>
+        </div>
+        <button id="refrescar" class="btn secundario">Refrescar</button>
+        <button id="exportar" class="btn">Exportar CSV</button>
+      </div>
+
+      <p id="periodo-label" class="periodo-label"></p>
+
+      <table id="tabla">
+        <thead><tr><th>Fecha</th><th>Tipo</th><th>Área</th><th>Categoría</th><th class="num">Monto</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Resumen</h2>
+      <div class="resumen-grid">
+        <div class="card kpi"><h3>Total Ingresos</h3><p id="kpi-ingresos" class="valor">—</p></div>
+        <div class="card kpi"><h3>Total Gastos</h3><p id="kpi-gastos" class="valor">—</p></div>
+        <div class="card kpi"><h3>Balance</h3><p id="kpi-balance" class="valor balance neutro">—</p></div>
+      </div>
+      <div class="grid-2">
+        <div><h3>Top áreas de ingreso</h3><ol id="top-ingresos"></ol></div>
+        <div><h3>Top áreas de gasto</h3><ol id="top-gastos"></ol></div>
+      </div>
+      
+      <div class="desglose-section">
+        <h3>Desglose por Área</h3>
+        <div id="desglose" class="desglose-container"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

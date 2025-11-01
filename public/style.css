@@ -1,0 +1,73 @@
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial;line-height:1.45;background:#f6f7fb;color:#222}
+header{padding:24px;text-align:center;background:#7fa8ef; box-shadow: 0 2px 4px rgba(0,0,0,.1);border-bottom:1px solid #e7e8ef;position:relative}
+h1{margin:0;letter-spacing:.2px}
+main{max-width:980px;margin:24px auto;padding:0 16px;display:grid;gap:16px}
+.panel{background:#fff;border:1px solid #e7e8ef;border-radius:14px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+h2{font-size:1.1rem;color:#3a3f58;margin-top:0}
+
+form#form{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;align-items:center}
+form#form input,form#form select{width:100%;padding:10px;border:1px solid #d3d6e0;border-radius:8px;background:#fff}
+.btn{padding:10px 14px;border-radius:10px;border:1px solid #3b82f6;background:#3b82f6;color:#fff;cursor:pointer;transition:transform .05s ease, box-shadow .2s}
+.btn:hover{box-shadow:0 4px 12px rgba(59,130,246,.25)}
+.btn.secundario{background:#fff;color:#3b82f6}
+button.btn:active{transform:scale(.98)}
+
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+#mes{min-width:160px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{padding:8px 10px;border-radius:999px;border:1px solid #e0e4f0;background:#f8f9fd;cursor:pointer}
+.chip:hover{background:#eef2ff}
+
+.tips{margin-top:8px;color:#667085;font-size:.9rem}
+
+.periodo-label{color:#5b6075;margin:.25rem 0 0 2px;font-size:.9rem}
+
+table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid #e7e8ef;border-radius:12px;overflow:hidden}
+thead th{font-weight:600;font-size:.95rem;color:#555;border-bottom:1px solid #e7e8ef;padding:10px;position:sticky;top:0;background:#f8f9fd;z-index:1}
+tbody td{padding:10px;border-bottom:1px solid #f0f1f6}
+tbody tr:nth-child(odd){background:#fbfcff}
+tbody tr:hover{background:#f1f4ff}
+th.num, td.num{text-align:right}
+button.mini{border:1px solid #e1e4ee;background:#fff;border-radius:6px;padding:4px 8px;cursor:pointer}
+button.mini:hover{background:#f3f5fb}
+
+.badge{display:inline-block;padding:.15rem .5rem;border-radius:999px;font-size:.8rem;font-weight:600}
+.badge.ingreso{background:#e8f5e9;color:#2e7d32;border:1px solid #b7e1bd}
+.badge.gasto{background:#ffebee;color:#c62828;border:1px solid #f5c6cb}
+
+.resumen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:8px 0 16px}
+.card.kpi{background:#ffffff;border:1px solid #e7e8ef;border-radius:14px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card.kpi h3{margin:0;color:#50546a;font-size:1rem}
+.valor{font-size:1.6rem;margin:.35rem 0 0}
+.valor.balance.positivo{color:#137333}
+.valor.balance.negativo{color:#a50e0e}
+.valor.balance.neutro{color:#4b5563}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* Desglose por área */
+.desglose-section{margin-top:20px}
+.desglose-section h3{margin:0 0 12px;color:#3a3f58;font-size:1rem}
+.desglose-container{display:flex;flex-direction:column;gap:12px}
+.desglose-área{border:1px solid #e7e8ef;border-radius:12px;padding:14px;background:#fbfcff}
+.desglose-área-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid #e7e8ef}
+.desglose-área-name{font-weight:600;font-size:1.05rem;color:#2d3748}
+.desglose-área-totales{display:flex;gap:16px;font-size:0.9rem}
+.desglose-área-totales span{display:inline-block;padding:4px 10px;border-radius:6px}
+.desglose-ingresos{background:#e8f5e9;color:#2e7d32;font-weight:500}
+.desglose-gastos{background:#ffebee;color:#c62828;font-weight:500}
+.desglose-balance{background:#e3f2fd;color:#1565c0;font-weight:600}
+.desglose-categorias{margin-top:10px;padding-left:12px}
+.desglose-categoria{display:flex;justify-content:space-between;padding:6px 8px;margin:4px 0;background:#fff;border-radius:6px;border-left:3px solid #ddd;font-size:0.9rem}
+.desglose-categoria.ingreso{border-left-color:#4caf50}
+.desglose-categoria.gasto{border-left-color:#f44336}
+.desglose-categoria-nombre{color:#555}
+.desglose-categoria-monto{font-weight:500;color:#333}
+
+@media (max-width:900px){
+  form#form{grid-template-columns:1fr 1fr}
+  .resumen-grid,.grid-2{grid-template-columns:1fr}
+  .desglose-área-header{flex-direction:column;align-items:flex-start;gap:8px}
+  .desglose-área-totales{flex-wrap:wrap}
+}
