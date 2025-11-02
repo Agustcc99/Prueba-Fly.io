@@ -10,7 +10,8 @@ import bcrypt from 'bcryptjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
+const app = express()
+;
 app.use(cors({
   origin: true,
   credentials: true
@@ -163,15 +164,6 @@ app.post('/api/auth/login', async (req, res) => {
     }
     
     console.log(`[AUTH] Login exitoso para usuario: ${usuario}, Session ID: ${req.sessionID}`);
-    
-    // Asegurar que la cookie se establezca
-    res.cookie('lu-finanzas.sid', req.sessionID, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-      path: '/'
-    });
     
     res.json({ success: true, user: usuario, nombre: usuarios[usuario].nombre });
   });

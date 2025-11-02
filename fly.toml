@@ -2,7 +2,7 @@
 # Este archivo define cómo se despliega la aplicación en fly.io
 
 app = "lu-finanzas-api"  # Cambia esto por el nombre de tu app en fly.io
-primary_region = "iad"   # Región (iad = Virginia, gru = Sao Paulo, etc.)
+primary_region = "gru"   # Región (iad = Virginia, gru = Sao Paulo, etc.)
 
 [build]
   # No necesitamos build específico, fly.io detectará automáticamente Node.js
@@ -24,7 +24,6 @@ primary_region = "iad"   # Región (iad = Virginia, gru = Sao Paulo, etc.)
 
 [env]
   NODE_ENV = "production"
-  PORT = "3000"
   DATA_DIR = "/data"
   # SESSION_SECRET se configura con: fly secrets set SESSION_SECRET=tu_secreto_super_seguro
 
